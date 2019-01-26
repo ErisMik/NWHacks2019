@@ -1,7 +1,7 @@
 FROM python:3.6
 
-RUN mkdir -p /usr/src/nwhack
-WORKDIR /usr/src/nwhack
+RUN mkdir -p /usr/src/nlp
+WORKDIR /usr/src/nlp
 
 RUN apt-get -y update && apt-get install -y default-jre wget unzip
 

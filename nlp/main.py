@@ -24,11 +24,11 @@ def find_jira_item(doc):
     - Who is reporting the issue
     - What the issue is about
     """
-    who = None
-    what = None
 
     sents = [sent for sent in doc.sents]
     for x in range(len(sents)):
+        who = None
+        what = None
         sent = sents[x]
         for word in sent:
             if "jira" in word.text.lower():  # Find the jira tag
