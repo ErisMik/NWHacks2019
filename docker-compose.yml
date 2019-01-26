@@ -1,0 +1,42 @@
+version: '3'
+services:
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis:4.0.5-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+
+  nlp:
+    container_name: nlp
+    hostname: nlp
+    build:
+      context: ./nlp
+    command: ['python', 'main.py', '--process']
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./nlp:/usr/src/nlp
+    ports:
+      - "5000:5000"
+
+  npm:
+    container_name: npm
+    hostname: npm
+    build:
+      context: ./frontend
+    command: ["npm", "start"]
+    volumes:
+      - ./frontend:/usr/src/npm
+    ports:
+      - "3000:3000"
+
+  speech:
+    container_name: speech
+    hostname: speech
+    build:
+      context: ./speech
+    command: ['echo', 'test']
+    volumes:
+      - ./speech:/usr/src/speech
