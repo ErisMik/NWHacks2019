@@ -8,7 +8,7 @@ def do_jira_action(jira_item):
     print(jira_item)
     params = {'text': jira_item['what'], 'author': jira_item['who']}
     # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendMessage', params=params)
-    # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
+    request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
 
 
 def backtrack_pronoun(rdb, idx, pronoun):
@@ -95,7 +95,7 @@ def find_jira_item(rdb, idx, line, speaker):
     what = []
 
     for word in line:
-        if "jira" in word.text.lower() or "issue" in word.text.lower():  # Find the jira tag
+        if word.text.lower() in ["jira", "issue", "problem"]:  # Find the jira tag
             possible_who = []
             possible_what = []
 
