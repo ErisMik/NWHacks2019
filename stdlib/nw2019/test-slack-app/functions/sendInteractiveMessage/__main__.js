@@ -1,5 +1,7 @@
 const message = require('../../utils/message');
-const key = 'xoxp-535547249894-534329040453-533966167796-f0ace6f1775943d5fae99765cf56c7ad'
+//const key = 'xoxp-535547249894-534329040453-533966167796-f0ace6f1775943d5fae99765cf56c7ad'
+const key = 'xoxb-535547249894-534190948674-LUyyNxaySxkT8DMktkczBbPO'
+const getBotToken = require('../../helpers/get_bot_token.js');
 
 /**
 * /sendMessage
@@ -13,7 +15,7 @@ module.exports = (text = "Would you like to create JIRA issue", callback) => {
         {
             "text": "Do you want to create JIRA ticket",
             "fallback": "You are unable to create JIRA ticket",
-            "callback_id": "wopr_game",
+            "callback_id": "create_jira",
             "color": "#3AA3E3",
             "attachment_type": "default",
             "actions": [
@@ -21,10 +23,10 @@ module.exports = (text = "Would you like to create JIRA issue", callback) => {
                     "name": "jira",
                     "text": "yes",
                     "type": "button",
-                    "value": "yes"
+                    "value": "jira"
                 },
                 {
-                    "name": "jira",
+                    "name": "no",
                     "text": "no",
                     "type": "button",
                     "value": "no"
