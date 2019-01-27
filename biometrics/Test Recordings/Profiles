@@ -1,0 +1,14 @@
+python3 EnrollProfile.py 7f42f8854a974500a44bfa2e0664f1dc a123c60d-6117-4593-bead-2d3f19e0a312 output.wav True
+
+python3 VerifyFile.py 7f42f8854a974500a44bfa2e0664f1dc output.wav a123c60d-6117-4593-bead-2d3f19e0a312
+
+python3 IdentifyFile.py 7f42f8854a974500a44bfa2e0664f1dc output.wav true a123c60d-6117-4593-bead-2d3f19e0a312
+
+
+Yuming - da1b72f4-3725-4924-8157-3a5c11777022
+Harry - a123c60d-6117-4593-bead-2d3f19e0a31
+
+python3 EnrollProfile.py 7f42f8854a974500a44bfa2e0664f1dc da1b72f4-3725-4924-8157-3a5c11777022 yuming.wav True
+
+
+python3 IdentifyFile.py 7f42f8854a974500a44bfa2e0664f1dc harryValidate.wav true a123c60d-6117-4593-bead-2d3f19e0a312,da1b72f4-3725-4924-8157-3a5c11777022

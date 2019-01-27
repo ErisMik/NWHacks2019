@@ -3,7 +3,7 @@ import soundfile as sf
 
 samplerate = 16000  # Hertz
 duration = 30  # seconds
-filename = 'output.wav'
+filename = 'yuming.wav'
 
 mydata = sd.rec(int(samplerate * duration), samplerate=samplerate,
                 channels=1, blocking=True)
