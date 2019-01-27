@@ -36,6 +36,17 @@ services:
   #   ports:
   #     - "3000:3000"
 
+  # backend:
+  #   container_name: backend
+  #   hostname: backend
+  #   build:
+  #     context: ./backend
+  #   command: ["python", "main.py"]
+  #   volumes:
+  #     - ./backend:/usr/src/backend
+  #   ports:
+  #     - "6677:6677"
+
   speech:
     container_name: speech
     hostname: speech

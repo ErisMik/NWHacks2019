@@ -13,6 +13,7 @@ def main(rdb):
     current_idx = 0
 
     while True:
+        # Find the Jira item in the current newest line
         if current_idx < get_redis_len(rdb):
             content = get_line_from_redis(rdb, current_idx)
             print("=== === === ===")
@@ -25,6 +26,8 @@ def main(rdb):
                 do_jira_action(jira_item)
 
             current_idx += 1
+
+        # Find the tags from the whole transcript
 
 if __name__ == "__main__":
     rdb = redis.StrictRedis(host='redis', port=6379, db=0)
