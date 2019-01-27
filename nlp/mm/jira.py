@@ -2,7 +2,7 @@ import requests
 import spacy
 from spacy.symbols import nsubj, pobj, ADP, advcl, PRON, ccomp, PUNCT, acomp, xcomp
 
-from mm.redisw import get_line_from_redis
+from mm.redisw import get_line_from_redis, norm_from_line
 
 def do_jira_action(jira_item):
     print(jira_item)
@@ -35,7 +35,7 @@ def backtrack_jira_preposition(rdb, idx):
     prep_phrase = None
     while not prep_phrase and idx > 0:
         idx -= 1;
-        sent = nlp( get_line_from_redis(rdb, idx)['line'] )
+        sent = nlp( norm_from_line( get_line_from_redis(rdb, idx)['line'] ))
 
         # acomp case
         for word in sent:
