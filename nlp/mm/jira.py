@@ -1,6 +1,6 @@
 import requests
 import spacy
-from spacy.symbols import nsubj, pobj, ADP, advcl, PRON, ccomp, PUNCT, acomp, xcomp
+from spacy.symbols import nsubj, pobj, ADP, advcl, PRON, ccomp, PUNCT, acomp, xcomp, dobj, auxpass, DET
 
 from mm.redisw import get_line_from_redis, norm_from_line
 
@@ -8,7 +8,7 @@ def do_jira_action(jira_item):
     print(jira_item)
     params = {'text': jira_item['what'], 'author': jira_item['who']}
     # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendMessage', params=params)
-    request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
+    # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
 
 
 def backtrack_pronoun(rdb, idx, pronoun):
@@ -23,6 +23,14 @@ def backtrack_pronoun(rdb, idx, pronoun):
             peeps.add(get_line_from_redis(rdb, idx)['speaker'])
             idx -= 1
         return list(peeps)
+
+    if 'we' in pronoun.norm_:
+        peeps = set()
+        while idx >= 0:
+            peeps.add(get_line_from_redis(rdb, idx)['speaker'])
+            idx -= 1
+        return list(peeps)
+
 
     if 'i' in pronoun.norm_:
         return [get_line_from_redis(rdb, idx)['speaker']]
@@ -46,6 +54,17 @@ def backtrack_jira_preposition(rdb, idx):
                         has_acomp = True
                         break
                 if has_acomp:
+                    return ' '.join([tok.text for tok in word.subtree])
+
+        # auxpass case
+        for word in sent:
+            if word.dep_ == "ROOT":
+                has_auxpass = False
+                for child in word.children:
+                    if child.dep == auxpass:
+                        has_auxpass = True
+                        break
+                if has_auxpass:
                     return ' '.join([tok.text for tok in word.subtree])
 
         # ccomp case
@@ -76,7 +95,7 @@ def find_jira_item(rdb, idx, line, speaker):
     what = []
 
     for word in line:
-        if "jira" in word.text.lower():  # Find the jira tag
+        if "jira" in word.text.lower() or "issue" in word.text.lower():  # Find the jira tag
             possible_who = []
             possible_what = []
 
@@ -95,29 +114,40 @@ def find_jira_item(rdb, idx, line, speaker):
                     # Find the possible whats
                     possible_what = [child for child in parent.subtree if child.pos == ADP]
 
-            ## Determine the correct WHO
-            proper_nouns = [who for who in possible_who if not who.pos == PRON]
-            if len(proper_nouns) > 0:
-                for proper_noun in proper_nouns:
-                    deps = [tok.text for tok in proper_noun.ancestors if tok.dep == advcl]  # Parse out false positives
-                    if len(deps) == 0:
-                        who.append(proper_noun.norm_)
-            else:
-                for pronoun in possible_who:
-                    deps = [tok.text for tok in pronoun.ancestors if tok.dep == advcl]  # Parse out false positives
-                    if len(deps) == 0:
-                        who += backtrack_pronoun(rdb, idx, pronoun)
 
-            ## Determine the correct WHAT
-            for preposition in possible_what:
-                # Find the prepositional phrase (WHAT)
-                deps = [tok.text for tok in preposition.ancestors if tok.dep == advcl]  # Parse out false positives
-                if len(deps) == 0:
-                    for prep_child in preposition.subtree:
-                        if prep_child.dep == pobj:
-                            if prep_child.pos == PRON:
-                                what.append(backtrack_jira_preposition(rdb, idx))
-                            else:
-                                what.append(' '.join([tok.norm_ for tok in preposition.subtree]))  # Find the prepositional phrase
+            for parent in word.ancestors:
+                if parent.text.lower() in ['file', 'create', 'make']:  # Ensure the potential verb action exists
 
-            return {'what': ' '.join([item.strip().capitalize() for item in what]), 'who': ' '.join([person.capitalize() for person in who])}
+                    ## Determine the correct WHO
+                    proper_nouns = [who for who in possible_who if not who.pos == PRON]
+                    if len(proper_nouns) > 0:
+                        for proper_noun in proper_nouns:
+                            deps = [tok.text for tok in proper_noun.ancestors if tok.dep == advcl]  # Parse out false positives
+                            if len(deps) == 0:
+                                who.append(proper_noun.norm_)
+                    else:
+                        for pronoun in possible_who:
+                            deps = [tok.text for tok in pronoun.ancestors if tok.dep == advcl]  # Parse out false positives
+                            if len(deps) == 0:
+                                who += backtrack_pronoun(rdb, idx, pronoun)
+
+                    ## Determine the correct WHAT
+                    # Prepositional phrase case
+                    for preposition in possible_what:
+                        # Find the prepositional phrase (WHAT)
+                        deps = [tok.text for tok in preposition.ancestors if tok.dep == advcl]  # Parse out false positives
+                        if len(deps) == 0:
+                            for prep_child in preposition.subtree:
+                                if prep_child.dep == pobj:
+                                    if prep_child.pos == PRON:
+                                        what.append(backtrack_jira_preposition(rdb, idx))
+                                    elif prep_child.pos == DET:
+                                        what.append(backtrack_jira_preposition(rdb, idx))
+                                    else:
+                                        what.append(' '.join([tok.norm_ for tok in preposition.subtree]))  # Find the prepositional phrase
+                    # Jira as dobj case
+                    if len(what) == 0:
+                        if word.dep == dobj:
+                            what.append(backtrack_jira_preposition(rdb, idx))
+
+                    return {'what': ' '.join([item.strip().capitalize() for item in what]), 'who': ' '.join([person.capitalize() for person in who])}
