@@ -25,35 +25,35 @@ services:
       - redis
       - speech
 
-  # npm:
-  #   container_name: npm
-  #   hostname: npm
-  #   build:
-  #     context: ./frontend
-  #   command: ["npm", "start"]
-  #   volumes:
-  #     - ./frontend:/usr/src/npm
-  #   ports:
-  #     - "3000:3000"
+  npm:
+    container_name: npm
+    hostname: npm
+    build:
+      context: ./frontend
+    command: ["npm", "start"]
+    volumes:
+      - ./frontend:/usr/src/npm
+    ports:
+      - "3000:3000"
 
-  # backend:
-  #   container_name: backend
-  #   hostname: backend
-  #   build:
-  #     context: ./backend
-  #   command: ["python", "main.py"]
-  #   volumes:
-  #     - ./backend:/usr/src/backend
-  #   ports:
-  #     - "6677:6677"
+  backend:
+    container_name: backend
+    hostname: backend
+    build:
+      context: ./backend
+    command: ["python", "main.py"]
+    volumes:
+      - ./backend:/usr/src/backend
+    ports:
+      - "6677:6677"
 
   speech:
     container_name: speech
     hostname: speech
     build:
       context: ./speech
-    command: ['python', 'main.py']
-    # command: ['python', 'test.py']
+    # command: ['python', 'main.py']
+    command: ['python', 'test.py']
     volumes:
       - ./speech:/usr/src/speech
     devices:

@@ -6,6 +6,7 @@ from spacy import displacy
 from mm.jira import find_jira_item, do_jira_action
 from mm.redisw import get_redis_len, get_line_from_redis
 from mm.contractions import expand_contractions
+from mm.tags import feature_extract_document
 
 def main(rdb):
     # Preload models for performance later
@@ -31,7 +32,11 @@ def main(rdb):
 
             current_idx += 1
 
-        # Find the tags from the whole transcript
+            ## Find the tags from the whole transcript
+            trans_content = rdb.lrange('transcript', 0, -1)
+            transcript = [json.loads(line.decode("utf-8")) for line in trans_content]
+            tags = feature_extract_document(transcript)
+            rdb.set('tags', json.dumps(tags))
 
 if __name__ == "__main__":
     rdb = redis.StrictRedis(host='redis', port=6379, db=0)
