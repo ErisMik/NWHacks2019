@@ -10,8 +10,9 @@ def normalize(doc):
 
     for x in range(len(content)):
         content[x] = content[x].strip()
-        if '.' not in content[x][-1]:
-            content[x] += '.'
+        if len(content[x]) > 0:
+            if '.' not in content[x][-1]:
+                content[x] += '.'
     return ' '.join(content)
 
 def feature_extract_document(doc):
@@ -26,4 +27,7 @@ def feature_extract_document(doc):
     response  = requests.post(key_phrase_api_url, headers=headers, json=documents)
     key_phrases = response.json()
 
-    return key_phrases['documents'][0]['keyPhrases']
+    if len(key_phrases['documents']) > 0:
+        return key_phrases['documents'][0]['keyPhrases']
+    else:
+        return ""
