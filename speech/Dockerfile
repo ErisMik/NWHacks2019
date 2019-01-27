@@ -9,5 +9,5 @@ RUN wget "http://ftp.se.debian.org/debian/pool/main/o/openssl/libssl1.0.0_1.0.2l
 
 RUN dpkg -i libssl1.0.0_1.0.2l-1~bpo8+1_amd64.deb
 
-RUN pip install redis azure-cognitiveservices-speech
+RUN pip install redis azure-cognitiveservices-speech googletrans requests
 
