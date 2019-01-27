@@ -24,16 +24,16 @@ services:
       - redis
       - speech
 
-  npm:
-    container_name: npm
-    hostname: npm
-    build:
-      context: ./frontend
-    command: ["npm", "start"]
-    volumes:
-      - ./frontend:/usr/src/npm
-    ports:
-      - "3000:3000"
+  # npm:
+  #   container_name: npm
+  #   hostname: npm
+  #   build:
+  #     context: ./frontend
+  #   command: ["npm", "start"]
+  #   volumes:
+  #     - ./frontend:/usr/src/npm
+  #   ports:
+  #     - "3000:3000"
 
   speech:
     container_name: speech

@@ -1,28 +1,24 @@
+import redis
 import spacy
 from spacy import displacy
-from jira import find_jira_item
 
-def normalize():
-    content = ""
-    with open('transcript.txt', 'r') as in_file:
-        for line in in_file:
-            texts = line.split(":")
+from mm.jira import find_jira_item
+from mm.redisw import get_redis_len, get_line_from_redis
 
-            content += texts[1].strip()
-            if not '.' in content[-1]:
-                content += '.'
-            content += " "
-    return content
-
-def main():
+def main(rdb):
     nlp = spacy.load('en')
-    content = normalize()
-    print(content)
-    doc = nlp(content)
+    current_idx = 0
 
-    find_jira_item(doc)
+    while current_idx < get_redis_len(rdb):
+        content = get_line_from_redis(rdb, current_idx)
+        line_doc = nlp(content['line'])
+
+        print(content)
+        find_jira_item(rdb, current_idx, line_doc)
+        current_idx += 1
 
     # displacy.serve(doc, style='dep')
 
 if __name__ == "__main__":
-    main()
+    rdb = redis.StrictRedis(host='redis', port=6379, db=0)
+    main(rdb)
