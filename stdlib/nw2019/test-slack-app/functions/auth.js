@@ -105,7 +105,7 @@ module.exports = (code = null, error = '', callback) => {
           name: identity.team,
           access_token: auth.access_token
         }
-
+        console.log("setting team")
         storage.setTeam(team.id, team, (err, id) => {
           if (err) {
             return callback(err);
