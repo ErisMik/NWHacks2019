@@ -44,9 +44,7 @@ while 1:
         line = req['speaker'] + ": {} (translated from - ".format(trans.text) + result.text + ")"
         print(line)
         split_line = line.split(":")
-        split_text = split_line[1].split(".")
-        for sent in split_text:
-            line_dict = {'speaker': split_line[0], 'line': sent}
-            r.rpush('transcript', json.dumps(line_dict))
+        line_dict = {'speaker': split_line[0], 'line': split_line[1]}
+        r.rpush('transcript', json.dumps(line_dict))
 
 print("Done!")
