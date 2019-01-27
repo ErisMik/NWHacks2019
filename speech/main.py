@@ -8,7 +8,7 @@ speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_r
 speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
 
 r = redis.StrictRedis(host='redis', port=6379, db=0)
-
+r.delete('transcript')
 
 while 1:
     result = speech_recognizer.recognize_once()

@@ -12,18 +12,19 @@ def main(rdb):
 
     current_idx = 0
 
-    while current_idx < get_redis_len(rdb):
-        content = get_line_from_redis(rdb, current_idx)
-        print("=== === === ===")
-        print(content)
-        expanded_content = expand_contractions(content['line'])
-        line_doc = nlp(expanded_content)
+    while True:
+        if current_idx < get_redis_len(rdb):
+            content = get_line_from_redis(rdb, current_idx)
+            print("=== === === ===")
+            print(content)
+            expanded_content = expand_contractions(content['line'])
+            line_doc = nlp(expanded_content)
 
-        jira_item = find_jira_item(rdb, current_idx, line_doc, content['speaker'])
-        if jira_item:
-            do_jira_action(jira_item)
+            jira_item = find_jira_item(rdb, current_idx, line_doc, content['speaker'])
+            if jira_item:
+                do_jira_action(jira_item)
 
-        current_idx += 1
+            current_idx += 1
 
 if __name__ == "__main__":
     rdb = redis.StrictRedis(host='redis', port=6379, db=0)
