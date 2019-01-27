@@ -11,7 +11,7 @@ export default ({ name, spoke, what, who }) => {
         <p>- {spoke}</p>
       </div>
       <div style={image}>
-        {what ? (
+        {(what || what == "" )? (
           <img
             style={jira_icon}
             src="https://www.teamlead.ru/download/thumbnails/18514301/jira_icon.png?version=1&modificationDate=1301044830000&api=v2"

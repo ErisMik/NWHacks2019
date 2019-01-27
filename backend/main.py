@@ -21,6 +21,7 @@ async def hello(websocket, path):
             'tags': tags,
         }
 
+        print(".")
         await websocket.send(json.dumps(payload))
         time.sleep(2)
 
