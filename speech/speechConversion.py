@@ -1,6 +1,6 @@
 import azure.cognitiveservices.speech as speechsdk
 
-speech_key, service_region = "4e8efbac9db7447ba94c6662d1ff2297", "westus"
+speech_key, service_region = "b7b619025538444082741e8befde119e", "westus"
 speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
 
 speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)

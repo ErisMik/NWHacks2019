@@ -5,4 +5,5 @@ WORKDIR /usr/src/speech
 
 # RUN apt-get -y update && apt-get install -y <package_name>
 
-RUN pip install redis
+RUN pip install redis azure-cognitiveservices-speech
+
