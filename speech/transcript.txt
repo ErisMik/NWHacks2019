@@ -4,3 +4,4 @@ justin: I found a bug in our frontend, the button won't update
 eric: Let's file a jira for it
 harry: While we are at it, can you create another jira ticket for the websocket issue
 eric: I'll put the create backup issue in jira also
+eric: Jeff could you file a jira issue for the bold text

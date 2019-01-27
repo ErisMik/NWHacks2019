@@ -8,6 +8,6 @@ RUN apt-get -y update && apt-get install -y default-jre wget unzip
 RUN pip install tika nltk spacy
 RUN python -c "import nltk; nltk.download('punkt'); nltk.download('wordnet'); nltk.download('stopwords');"
 RUN python -m spacy download en
-run pip install plotly scikit-learn PyDictionary pycontractions redis
+run pip install plotly scikit-learn PyDictionary pycontractions redis requests
 
 EXPOSE 5000
