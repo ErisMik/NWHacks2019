@@ -1,13 +1,13 @@
-import React from 'react'
-import Name from './Name'
+import React from "react";
+const nameStyle = { color: "pink" };
 
-const Line = (name, spoke) => {
-	return(
-		<div>
-			<Name name={name}/>
-			<pre>{spoke}</pre>
-		</div>
-	)
-}
+export default ({ name, spoke }) => (
+  <div>
+    <div style={nameStyle}>
+      <p>{name}</p>
+    </div>
 
-export default Line
+    <p>{spoke}</p>
+    {/* <pre>spoke</pre> */}
+  </div>
+);
