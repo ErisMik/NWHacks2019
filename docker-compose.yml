@@ -44,7 +44,7 @@ services:
     command: ['python', 'main.py']
     volumes:
       - ./speech:/usr/src/speech
-    # devices:
-    #   - "/dev/ttyUSB0:/dev/ttyUSB0"
+    devices:
+      - "/dev/snd:/dev/snd"
     depends_on:
       - redis
