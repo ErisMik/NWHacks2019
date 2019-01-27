@@ -6,9 +6,9 @@ from mm.redisw import get_line_from_redis
 
 def do_jira_action(jira_item):
     print(jira_item)
-    params = {'text': jira_item}
+    params = {'text': jira_item['what'], 'author': jira_item['who']}
     # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendMessage', params=params)
-    # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
+    request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
 
 
 def backtrack_pronoun(rdb, idx, pronoun):
@@ -120,4 +120,4 @@ def find_jira_item(rdb, idx, line, speaker):
                             else:
                                 what.append(' '.join([tok.norm_ for tok in preposition.subtree]))  # Find the prepositional phrase
 
-            return "Jira item: %s - %s" % (who, what)
+            return {'what': ' '.join([item.strip().capitalize() for item in what]), 'who': ' '.join([person.capitalize() for person in who])}
