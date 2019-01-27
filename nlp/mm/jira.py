@@ -1,6 +1,6 @@
 import requests
 import spacy
-from spacy.symbols import nsubj, pobj, ADP, advcl, PRON
+from spacy.symbols import nsubj, pobj, ADP, advcl, PRON, ccomp, PUNCT, acomp, xcomp
 
 from mm.redisw import get_line_from_redis
 
@@ -8,7 +8,7 @@ def do_jira_action(jira_item):
     print(jira_item)
     params = {'text': jira_item}
     # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendMessage', params=params)
-    request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
+    # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
 
 
 def backtrack_pronoun(rdb, idx, pronoun):
@@ -37,9 +37,29 @@ def backtrack_jira_preposition(rdb, idx):
         idx -= 1;
         sent = nlp( get_line_from_redis(rdb, idx)['line'] )
 
-        # comp bypass
+        # acomp case
+        for word in sent:
+            if word.dep_ == "ROOT":
+                has_acomp = False
+                for child in word.children:
+                    if child.dep == acomp:
+                        has_acomp = True
+                        break
+                if has_acomp:
+                    return ' '.join([tok.text for tok in word.subtree])
 
-        # Normal case
+        # ccomp case
+        for word in sent:
+            if word.dep_ == "ROOT":
+                has_ccomp = False
+                for child in word.children:
+                    if child.dep == ccomp:
+                        has_ccomp = True
+                        break
+                if has_ccomp:
+                    return ' '.join([tok.text for tok in word.children if not tok.dep == ccomp and not tok.pos == PUNCT] + [word.text])
+
+        # preposition case
         for word in sent:
             if word.pos == ADP:
                 deps = [tok.text for tok in word.ancestors if tok.dep == advcl]  # Parse out false positives
@@ -62,7 +82,13 @@ def find_jira_item(rdb, idx, line, speaker):
 
             ## Find the possible WHO's and WHAT's
             for parent in word.ancestors:
-                if parent.text.lower() in ['file', 'create']:  # Ensure the potential verb action exists
+                if parent.text.lower() in ['file', 'create', 'make']:  # Ensure the potential verb action exists
+
+                    # xcomp case
+                    if parent.dep == xcomp:
+                        for grandparent in parent.ancestors:
+                            parent = grandparent
+
                     # Find the possible whos
                     possible_who = [child for child in parent.subtree if child.dep == nsubj]
 
