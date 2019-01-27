@@ -256,23 +256,26 @@ class App extends React.Component {
   render() {
     //  const { transcript, tags } = this.state;
     return (
-      <div className="App" style={container}>
-        <div style={lineContainer}>
-          <h1>Transcript</h1>
-          <div>{this.state.transcript}</div>
+      <div style={bigContainer}>
+        <div className="App" style={container}>
+          <div style={lineContainer}>
+            <h1>Transcript</h1>
+            <div>{this.state.transcript}</div>
+          </div>
+
+          <div style={tagContainer}>
+            <h1>Tags</h1>
+            <div>{this.state.tags}</div>
+          </div>
+
+          {/* <Tag tag={"lol"} /> */}
+
+          <Websocket
+            url="ws://0.0.0.0:6677"
+            onMessage={this.websocketOnMessage}
+          />
         </div>
 
-        <div style={tagContainer}>
-          <h1>Tags</h1>
-          <div>{this.state.tags}</div>
-        </div>
-
-        {/* <Tag tag={"lol"} /> */}
-
-        <Websocket
-          url="ws://0.0.0.0:6677"
-          onMessage={this.websocketOnMessage}
-        />
         <div
           style={{ float: "left", clear: "both" }}
           ref={el => {
@@ -299,6 +302,11 @@ class App extends React.Component {
     //this.scrollToBottom();
   }
 }
+
+const bigContainer = {
+  flexDirection: "colomn",
+  display: "flex"
+};
 const container = {
   flexDirection: "row",
   display: "flex",
