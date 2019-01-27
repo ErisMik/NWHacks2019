@@ -7,13 +7,13 @@ import time
 r = redis.StrictRedis(host='redis', port=6379, db=0)
 
 async def hello(websocket, path):
-    time.sleep(0.5)
-
     trans_content = r.lrange('tagged_transcript', 0, -1)
-    transcript = [json.loads(line.decode("utf-8")) for line in trans_content]
+    transcript = ""
+    if trans_content: transcript = [json.loads(line.decode("utf-8")) for line in trans_content]
 
     tag_content = r.get('tags')
-    tags = json.loads(tag_content.decode("utf-8"))
+    tags = "[]"
+    if tag_content: tags = json.loads(tag_content.decode("utf-8"))
 
     payload = {
         'transcript': transcript,
