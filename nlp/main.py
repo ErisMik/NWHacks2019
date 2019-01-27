@@ -4,8 +4,7 @@ import spacy
 from spacy import displacy
 
 from mm.jira import find_jira_item, do_jira_action
-from mm.redisw import get_redis_len, get_line_from_redis
-from mm.contractions import expand_contractions
+from mm.redisw import get_redis_len, get_line_from_redis, norm_from_line
 from mm.tags import feature_extract_document
 
 def main(rdb):
@@ -20,7 +19,7 @@ def main(rdb):
             content = get_line_from_redis(rdb, current_idx)
             print("=== === === ===")
             print(content)
-            expanded_content = expand_contractions(content['line'])
+            expanded_content = norm_from_line(content['line'])
             line_doc = nlp(expanded_content)
 
             jira_item = find_jira_item(rdb, current_idx, line_doc, content['speaker'])
