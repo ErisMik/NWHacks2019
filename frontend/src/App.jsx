@@ -203,11 +203,11 @@ const testDataString = JSON.stringify(testData);
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const lines = this.handleLines(testDataString);
-    const tags = this.handleTags(testDataString);
+    //const lines = this.handleLines(testDataString);
+    //const tags = this.handleTags(testDataString);
     this.state = {
-      transcript: lines,
-      tags: tags
+      transcript: [],
+      tags: []
     };
   }
 
@@ -316,5 +316,5 @@ const container = {
   "align-content": "center"
 };
 const lineContainer = { flexGrow: 3, "font-style": "oblique" };
-const tagContainer = { flexGrow: 1, "align-self": "flex-start" };
+const tagContainer = { flexGrow: 1, "position": "fixed", "top": "20px", "right": "10%" };
 export default App;
