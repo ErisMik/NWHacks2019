@@ -4,7 +4,7 @@ import "./App.css";
 import Tag from "./Components/Tag";
 import Line from "./Components/Line";
 
-const None = "lol";
+const None = null;
 
 const testData = {
   transcript: [
@@ -228,16 +228,18 @@ class App extends React.Component {
     const result = JSON.parse(data);
     console.log(`result is ${JSON.stringify(result)}`);
 
-    return result.transcript.map(element => {
-      return (
+    return result.transcript.map(element => 
+      (element.item ? <Line
+          name={element.speaker}
+          spoke={element.line}
+          what={element.item.what}
+          who={element.item.who}
+        /> : 
         <Line
           name={element.speaker}
           spoke={element.line}
-          // what={element.item.what}
-          // who={element.item.who}
-        />
-      );
-    });
+        />)
+    );
   };
 
   /**
@@ -292,12 +294,12 @@ class App extends React.Component {
   }
 }
 const container = {
-  "flex-direction": "row",
-  display: "flex",
+  "flexDirection": "row",
+  "display": "flex",
   "justify-content": "center",
   "align-items": "baseline",
   "align-content": "center"
 };
-const lineContainer = { "flex-grow": 3 };
-const tagContainer = { "flex-grow": 1, "align-self": "flex-start" };
+const lineContainer = { "flexGrow": 3 };
+const tagContainer = { "flexGrow": 1, "alignSelf": "flex-start" };
 export default App;

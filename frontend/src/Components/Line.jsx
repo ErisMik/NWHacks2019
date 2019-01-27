@@ -1,6 +1,23 @@
 import React from "react";
 
-export default ({ name, spoke, what, who }) => (
+export default ({ name, spoke, what, who }) => {
+  let whatDiv
+  if(what){
+    whatDiv = (
+      <div style={whatStyle}>
+        <p>{what}</p>
+      </div>
+    )
+  }
+  let whoDiv
+  if(who){
+    whoDiv = (
+      <div style={whoStyle}>
+        <p>{who}</p>
+      </div>
+    )
+  }
+  return(
   <div>
     <div style={container}>
       <div style={nameStyle}>
@@ -13,17 +30,13 @@ export default ({ name, spoke, what, who }) => (
 
       {/* <pre>spoke</pre> */}
     </div>
-    <div style={whatStyle}>
-      <p>{what}</p>
-    </div>
-
-    <div style={whoStyle}>
-      <p>{who}</p>
-    </div>
+    {whatDiv}
+    {whoDiv}
   </div>
-);
+)
+};
 const nameStyle = { color: "pink" };
-const lineStyle = { maxwidth: 10, color: "grey", "align-self": "flex-end" };
+const lineStyle = { maxwidth: 10, color: "grey", "alignSelf": "flex-end" };
 const container = { display: "flex" };
 const whatStyle = { color: "black" };
 const whoStyle = { color: "black" };
