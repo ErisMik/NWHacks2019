@@ -228,17 +228,17 @@ class App extends React.Component {
     const result = JSON.parse(data);
     console.log(`result is ${JSON.stringify(result)}`);
 
-    return result.transcript.map(element => 
-      (element.item ? <Line
+    return result.transcript.map(element =>
+      element.item ? (
+        <Line
           name={element.speaker}
           spoke={element.line}
           what={element.item.what}
           who={element.item.who}
-        /> : 
-        <Line
-          name={element.speaker}
-          spoke={element.line}
-        />)
+        />
+      ) : (
+        <Line name={element.speaker} spoke={element.line} />
+      )
     );
   };
 
@@ -256,50 +256,64 @@ class App extends React.Component {
   render() {
     //  const { transcript, tags } = this.state;
     return (
-      <div className="App" style={container}>
-        <div style={lineContainer}>
-          <h1>Transcript</h1>
-          <div>{this.state.transcript}</div>
+      <div style={bigContainer}>
+        <div className="App" style={container}>
+          <div style={lineContainer}>
+            <h1>Transcript</h1>
+            <div>{this.state.transcript}</div>
+          </div>
+
+          <div style={tagContainer}>
+            <h1>Tags</h1>
+            <div>{this.state.tags}</div>
+          </div>
+
+          {/* <Tag tag={"lol"} /> */}
+
+          <Websocket
+            url="ws://0.0.0.0:6677"
+            onMessage={this.websocketOnMessage}
+          />
         </div>
 
-        <div style={tagContainer}>
-          <h1>Tags</h1>
-          <div>{this.state.tags}</div>
-        </div>
         <div
           style={{ float: "left", clear: "both" }}
           ref={el => {
             this.messagesEnd = el;
           }}
-        />
-        {/* <Tag tag={"lol"} /> */}
-
-        <Websocket
-          url="ws://0.0.0.0:6677"
-          onMessage={this.websocketOnMessage}
+          id="empty"
         />
       </div>
     );
   }
 
-  scrollToBottom = () => {
-    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-  };
+  // scrollToBottom = () => {
+  //   this.messagesEnd.scrollIntoView({ behavior: "instant", blcok: "end" });
+  // };
   componentDidMount() {
-    this.scrollToBottom();
+    var elmnt = document.getElementById("empty");
+    elmnt.scrollIntoView(false);
+    //this.scrollToBottom();
   }
 
   componentDidUpdate() {
-    this.scrollToBottom();
+    var elmnt = document.getElementById("empty");
+    elmnt.scrollIntoView(false);
+    //this.scrollToBottom();
   }
 }
+
+const bigContainer = {
+  flexDirection: "colomn",
+  display: "flex"
+};
 const container = {
-  "flexDirection": "row",
-  "display": "flex",
+  flexDirection: "row",
+  display: "flex",
   "justify-content": "center",
   "align-items": "baseline",
   "align-content": "center"
 };
-const lineContainer = { "flexGrow": 3 };
-const tagContainer = { "flexGrow": 1, "alignSelf": "flex-start" };
+const lineContainer = { flexGrow: 3 };
+const tagContainer = { flexGrow: 1, "align-self": "flex-start" };
 export default App;
