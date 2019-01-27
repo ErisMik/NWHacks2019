@@ -1,6 +1,6 @@
 import requests
 import spacy
-from spacy.symbols import nsubj, pobj, ADP, advcl, PRON, ccomp, PUNCT, acomp
+from spacy.symbols import nsubj, pobj, ADP, advcl, PRON, ccomp, PUNCT, acomp, xcomp
 
 from mm.redisw import get_line_from_redis
 
@@ -8,7 +8,7 @@ def do_jira_action(jira_item):
     print(jira_item)
     params = {'text': jira_item}
     # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendMessage', params=params)
-    request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
+    # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
 
 
 def backtrack_pronoun(rdb, idx, pronoun):
@@ -82,7 +82,13 @@ def find_jira_item(rdb, idx, line, speaker):
 
             ## Find the possible WHO's and WHAT's
             for parent in word.ancestors:
-                if parent.text.lower() in ['file', 'create']:  # Ensure the potential verb action exists
+                if parent.text.lower() in ['file', 'create', 'make']:  # Ensure the potential verb action exists
+
+                    # xcomp case
+                    if parent.dep == xcomp:
+                        for grandparent in parent.ancestors:
+                            parent = grandparent
+
                     # Find the possible whos
                     possible_who = [child for child in parent.subtree if child.dep == nsubj]
 
