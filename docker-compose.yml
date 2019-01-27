@@ -13,7 +13,8 @@ services:
     hostname: nlp
     build:
       context: ./nlp
-    command: ['python', 'main.py', '--process']
+    command: ['python', 'main.py']
+    # command: ['python', 'test.py']
     stdin_open: true
     tty: true
     volumes:
@@ -43,5 +44,7 @@ services:
     command: ['python', 'main.py']
     volumes:
       - ./speech:/usr/src/speech
+    # devices:
+    #   - "/dev/ttyUSB0:/dev/ttyUSB0"
     depends_on:
       - redis
