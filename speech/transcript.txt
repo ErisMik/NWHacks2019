@@ -5,3 +5,6 @@ eric: Let's file a jira for it
 harry: While we are at it, can you create another jira ticket for the websocket issue
 eric: I'll put the create backup issue in jira also
 eric: Jeff could you file a jira issue for the bold text
+johnson: Everything is broken
+eric: yeah okay I'll file the jira
+wesley: our backend is spitting out chinese characters, I'll create the jira for it.

@@ -8,7 +8,7 @@ def do_jira_action(jira_item):
     print(jira_item)
     params = {'text': jira_item}
     # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendMessage', params=params)
-    # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
+    request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
 
 
 def backtrack_pronoun(rdb, idx, pronoun):
