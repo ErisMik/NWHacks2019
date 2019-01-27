@@ -203,8 +203,8 @@ const testDataString = JSON.stringify(testData);
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const lines = this.handleLines(testDataString)
-    const tags = this.handleTags(testDataString)
+    const lines = this.handleLines(testDataString);
+    const tags = this.handleTags(testDataString);
     this.state = {
       transcript: lines,
       tags: tags
@@ -304,6 +304,7 @@ class App extends React.Component {
 }
 
 const bigContainer = {
+  "background-color": "eeeeee",
   flexDirection: "colomn",
   display: "flex"
 };

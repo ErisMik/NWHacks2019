@@ -21,7 +21,7 @@ export default ({ name, spoke, what, who }) => {
     </div>
   );
 };
-const nameStyle = { color: "#c0392b" };
+const nameStyle = { color: "#22313f" };
 const lineStyle = { maxwidth: 10, color: "grey", alignSelf: "flex-end" };
 const lineStyleHighlighted = {
   maxwidth: 10,
@@ -29,6 +29,6 @@ const lineStyleHighlighted = {
   alignSelf: "flex-end",
   background: "yellow"
 };
-const container = { display: "flex" };
+const container = { display: "flex", "justify-content": "center" };
 const jira_icon = { width: "30px", height: "30px", display: "inline" };
 const image = {};
