@@ -266,31 +266,37 @@ class App extends React.Component {
           <h1>Tags</h1>
           <div>{this.state.tags}</div>
         </div>
-        <div
-          style={{ float: "left", clear: "both" }}
-          ref={el => {
-            this.messagesEnd = el;
-          }}
-        />
+
         {/* <Tag tag={"lol"} /> */}
 
         <Websocket
           url="ws://0.0.0.0:6677"
           onMessage={this.websocketOnMessage}
         />
+        <div
+          style={{ float: "left", clear: "both" }}
+          ref={el => {
+            this.messagesEnd = el;
+          }}
+          id="empty"
+        />
       </div>
     );
   }
 
-  scrollToBottom = () => {
-    this.messagesEnd.scrollIntoView({ behavior: "instant", blcok: "end" });
-  };
+  // scrollToBottom = () => {
+  //   this.messagesEnd.scrollIntoView({ behavior: "instant", blcok: "end" });
+  // };
   componentDidMount() {
-    this.scrollToBottom();
+    var elmnt = document.getElementById("empty");
+    elmnt.scrollIntoView(false);
+    //this.scrollToBottom();
   }
 
   componentDidUpdate() {
-    this.scrollToBottom();
+    var elmnt = document.getElementById("empty");
+    elmnt.scrollIntoView(false);
+    //this.scrollToBottom();
   }
 }
 const container = {

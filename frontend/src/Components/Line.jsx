@@ -38,8 +38,8 @@ export default ({ name, spoke, what, who }) => {
     </div>
   );
 };
-const nameStyle = { color: "pink" };
-const lineStyle = { maxwidth: 10, color: "grey", "align-self": "flex-end" };
+const nameStyle = { color: "#1e8bc3" };
+const lineStyle = { maxwidth: 10, color: "#6c7a89", "align-self": "flex-end" };
 const lineContainer = { display: "flex" };
 const actionContainer = { display: "flex" };
 const bigContainer = { display: "flex", flexDirection: "column" };
