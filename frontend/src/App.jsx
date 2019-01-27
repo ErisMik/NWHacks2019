@@ -203,11 +203,11 @@ const testDataString = JSON.stringify(testData);
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const tagsToRender = this.handleTags(testDataString);
-    const linesToRender = this.handleLines(testDataString);
+    //const tagsToRender = this.handleTags(testDataString);
+    //const linesToRender = this.handleLines(testDataString);
     this.state = {
-      transcript: linesToRender,
-      tags: tagsToRender
+      transcript: [],
+      tags: []
     };
   }
 
@@ -228,17 +228,17 @@ class App extends React.Component {
     const result = JSON.parse(data);
     console.log(`result is ${JSON.stringify(result)}`);
 
-    return result.transcript.map(element => 
-      (element.item ? <Line
+    return result.transcript.map(element =>
+      element.item ? (
+        <Line
           name={element.speaker}
           spoke={element.line}
           what={element.item.what}
           who={element.item.who}
-        /> : 
-        <Line
-          name={element.speaker}
-          spoke={element.line}
-        />)
+        />
+      ) : (
+        <Line name={element.speaker} spoke={element.line} />
+      )
     );
   };
 
@@ -283,7 +283,7 @@ class App extends React.Component {
   }
 
   scrollToBottom = () => {
-    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    this.messagesEnd.scrollIntoView({ behavior: "instant", blcok: "end" });
   };
   componentDidMount() {
     this.scrollToBottom();
@@ -294,12 +294,12 @@ class App extends React.Component {
   }
 }
 const container = {
-  "flexDirection": "row",
-  "display": "flex",
+  flexDirection: "row",
+  display: "flex",
   "justify-content": "center",
   "align-items": "baseline",
   "align-content": "center"
 };
-const lineContainer = { "flexGrow": 3 };
-const tagContainer = { "flexGrow": 1, "alignSelf": "flex-start" };
+const lineContainer = { flexGrow: 3 };
+const tagContainer = { flexGrow: 1, "align-self": "flex-start" };
 export default App;
