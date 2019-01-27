@@ -2,7 +2,7 @@
   "name": "nw2019/test-slack-app",
   "version": "0.0.0",
   "description": "Basic Slack Application",
-  "author": "ajyxc",
+  "author": "nw2019",
   "main": "functions/__main__.js",
   "dependencies": {
     "lib": "^3.0.1",

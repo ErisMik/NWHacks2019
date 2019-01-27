@@ -3,31 +3,55 @@ const message = require('../../utils/message');
 const key = 'xoxb-535547249894-534190948674-LUyyNxaySxkT8DMktkczBbPO'
 const getBotToken = require('../../helpers/get_bot_token.js');
 
+const priority = {
+  0: "Low",
+  1: "Medium",
+  2: "High"
+}
+
 /**
 * /sendMessage
 * 
 * Basic request to forward a message to slack
 */
-module.exports = (text = "Would you like to create JIRA issue", callback) => {
+module.exports = (text = "Everything is broken", author = "Default", callback) => {
+  const pri = Math.floor(Math.random() * (2 - 0 + 1));
+  const ts = Math.round((new Date()).getTime() / 1000);
   const slackObj = {
-    "text": text,
     "attachments": [
         {
-            "text": "Do you want to create JIRA ticket",
-            "fallback": "You are unable to create JIRA ticket",
+            "fallback": "Minutes Made has a ticket for review!",
+            "color": "#36a64f",
+            "author_name": author,
+            "title": "Would you like me to create this JIRA ticket for you?",
             "callback_id": "create_jira",
-            "color": "#3AA3E3",
-            "attachment_type": "default",
-            "actions": [
+            "fields": [
+                {
+                  "title": "Summary",
+                  "value": text,
+                  "short": false
+                },
+                {
+                    "title": "Priority",
+                    "value": priority[pri],
+                    "short": false
+                }
+            ],
+            "image_url": "http://my-website.com/path/to/image.jpg",
+            "thumb_url": "http://example.com/path/to/thumb.png",
+            "footer": "Minutes Made API",
+            "footer_icon": "https://botw-pd.s3.amazonaws.com/styles/logo-thumbnail/s3/042012/jira.png",
+            "ts": ts,
+			 "actions": [
                 {
                     "name": "jira",
-                    "text": "yes",
+                    "text": "Publish Ticket to JIRA",
                     "type": "button",
                     "value": "jira"
                 },
                 {
                     "name": "no",
-                    "text": "no",
+                    "text": "Remove Ticket",
                     "type": "button",
                     "value": "no"
                 }
