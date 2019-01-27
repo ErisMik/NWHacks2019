@@ -3,6 +3,6 @@ FROM python:3.6
 RUN mkdir -p /usr/src/speech
 WORKDIR /usr/src/speech
 
-RUN apt-get -y update && apt-get install -y alsa-base alsa-utils
+RUN apt-get -y update && apt-get install -y alsa-utils
 
 RUN pip install redis

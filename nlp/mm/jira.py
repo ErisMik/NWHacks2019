@@ -7,23 +7,27 @@ from mm.redisw import get_line_from_redis
 def do_jira_action(jira_item):
     print(jira_item)
     params = {'text': jira_item}
-    # requests.get('https://nw2019.lib.id/test-slack-app@dev/sendMessage', params=params)
+    # request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendMessage', params=params)
+    request = requests.get('https://nw2019.lib.id/test-slack-app@dev/sendInteractiveMessage', params=params)
 
 
 def backtrack_pronoun(rdb, idx, pronoun):
     nlp = spacy.load('en')
 
-    # 'You' case
     if 'you' in pronoun.norm_:
-        pass
+        return [get_line_from_redis(rdb, idx-1)['speaker']]
 
     if 'us' in pronoun.norm_:
-        pass
+        peeps = set()
+        while idx >= 0:
+            peeps.add(get_line_from_redis(rdb, idx)['speaker'])
+            idx -= 1
+        return list(peeps)
 
     if 'i' in pronoun.norm_:
-        pass
+        return [get_line_from_redis(rdb, idx)['speaker']]
 
-    return "Backed %s" % pronoun.norm_
+    return ["Backed %s" % pronoun.norm_]
 
 def backtrack_jira_preposition(rdb, idx):
     nlp = spacy.load('en')
@@ -33,7 +37,7 @@ def backtrack_jira_preposition(rdb, idx):
         idx -= 1;
         sent = nlp( get_line_from_redis(rdb, idx)['line'] )
 
-        # ccomp bypass
+        # comp bypass
 
         # Normal case
         for word in sent:
@@ -69,10 +73,14 @@ def find_jira_item(rdb, idx, line, speaker):
             proper_nouns = [who for who in possible_who if not who.pos == PRON]
             if len(proper_nouns) > 0:
                 for proper_noun in proper_nouns:
-                    who.append(proper_noun.norm_)
+                    deps = [tok.text for tok in proper_noun.ancestors if tok.dep == advcl]  # Parse out false positives
+                    if len(deps) == 0:
+                        who.append(proper_noun.norm_)
             else:
                 for pronoun in possible_who:
-                    who.append(backtrack_pronoun(rdb, idx, pronoun))
+                    deps = [tok.text for tok in pronoun.ancestors if tok.dep == advcl]  # Parse out false positives
+                    if len(deps) == 0:
+                        who += backtrack_pronoun(rdb, idx, pronoun)
 
             ## Determine the correct WHAT
             for preposition in possible_what:
