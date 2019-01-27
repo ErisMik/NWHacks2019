@@ -2,24 +2,28 @@ import asyncio
 import websockets
 import redis
 import json
+import time
 
 r = redis.StrictRedis(host='redis', port=6379, db=0)
 
 async def hello(websocket, path):
-    await websocket.recv()
+    time.sleep(0.5)
 
     trans_content = r.lrange('tagged_transcript', 0, -1)
     transcript = [json.loads(line.decode("utf-8")) for line in trans_content]
 
-    tag_content = r.lrange('tags', 0, -1)
-    tags = [tag.decode("utf-8") for tag in tag_content]
+    tag_content = r.get('tags')
+    tags = json.loads(tag_content.decode("utf-8"))
 
     payload = {
         'transcript': transcript,
         'tags': tags,
     }
 
+    print("Posted")
     await websocket.send(json.dumps(payload))
+    print("Done Posted")
+
 
 start_server = websockets.serve(hello, '0.0.0.0', 6677)
 
