@@ -1,22 +1,6 @@
 import React from "react";
 
 export default ({ name, spoke, what, who }) => {
-  let whatDiv
-  if(what){
-    whatDiv = (
-      <div style={whatStyle}>
-        <p>{what}</p>
-      </div>
-    )
-  }
-  let whoDiv
-  if(who){
-    whoDiv = (
-      <div style={whoStyle}>
-        <p>{who}</p>
-      </div>
-    )
-  }
   return(
   <div>
     <div style={container}>
@@ -26,17 +10,18 @@ export default ({ name, spoke, what, who }) => {
 
       <div style={lineStyle}>
         <p>{spoke}</p>
+        {what ? <img style={jira_icon} src="https://www.teamlead.ru/download/thumbnails/18514301/jira_icon.png?version=1&modificationDate=1301044830000&api=v2"/> : null}
       </div>
 
       {/* <pre>spoke</pre> */}
     </div>
-    {whatDiv}
-    {whoDiv}
   </div>
 )
 };
 const nameStyle = { color: "pink" };
 const lineStyle = { maxwidth: 10, color: "grey", "alignSelf": "flex-end" };
+const lineStyleHighlighted = { maxwidth: 10, color: "grey", "alignSelf": "flex-end", "background": "yellow" };
 const container = { display: "flex" };
 const whatStyle = { color: "black" };
 const whoStyle = { color: "black" };
+const jira_icon = { width: "30px", height: "30px", display: "inline"};

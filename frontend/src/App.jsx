@@ -203,11 +203,11 @@ const testDataString = JSON.stringify(testData);
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const tagsToRender = this.handleTags(testDataString);
-    const linesToRender = this.handleLines(testDataString);
+    const lines = this.handleLines(testDataString)
+    const tags = this.handleTags(testDataString)
     this.state = {
-      transcript: linesToRender,
-      tags: tagsToRender
+      transcript: lines,
+      tags: tags
     };
   }
 
