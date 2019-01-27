@@ -1,6 +1,6 @@
 import requests
 import spacy
-from spacy.symbols import nsubj, pobj, ADP, advcl, PRON, ccomp, PUNCT
+from spacy.symbols import nsubj, pobj, ADP, advcl, PRON, ccomp, PUNCT, acomp
 
 from mm.redisw import get_line_from_redis
 
@@ -40,6 +40,13 @@ def backtrack_jira_preposition(rdb, idx):
         # acomp case
         for word in sent:
             if word.dep_ == "ROOT":
+                has_acomp = False
+                for child in word.children:
+                    if child.dep == acomp:
+                        has_acomp = True
+                        break
+                if has_acomp:
+                    return ' '.join([tok.text for tok in word.subtree])
 
         # ccomp case
         for word in sent:
@@ -48,6 +55,7 @@ def backtrack_jira_preposition(rdb, idx):
                 for child in word.children:
                     if child.dep == ccomp:
                         has_ccomp = True
+                        break
                 if has_ccomp:
                     return ' '.join([tok.text for tok in word.children if not tok.dep == ccomp and not tok.pos == PUNCT] + [word.text])
 

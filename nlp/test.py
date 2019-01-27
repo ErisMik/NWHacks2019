@@ -2,6 +2,6 @@ import spacy
 from spacy import displacy
 
 nlp = spacy.load('en')
-doc = nlp("While we are at it, can you create another jira ticket for the websocket issue")
+doc = nlp("The REST request made is wrong.")
 
 displacy.serve(doc, style='dep')
