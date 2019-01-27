@@ -1,6 +1,7 @@
 import redis
 import json
 import configparser
+import urllib.request
 import azure.cognitiveservices.speech as speechsdk
 
 config = configparser.ConfigParser()
@@ -10,11 +11,12 @@ speech_key = config['DEFAULT']['SpeechKey']
 speaker_key = config['DEFAULT']['SpeakerKey']
 service_region = config['DEFAULT']['ServiceRegion']
 speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
+transl_config = speechsdk.translation.SpeechTranslationConfig(subscription=speech_key, region=service_region, target_languages=['en-ca'], speech_recognition_language='zh-cmn')
 
 speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
-
+transl_recognizer = speechsdk.translation.TranslationRecognizer(translation_config=transl_config)
+# setup Redis
 r = redis.StrictRedis(host='redis', port=6379, db=0)
-
 r.delete('transcript')
 
 print("Starting speech recognition ...")
