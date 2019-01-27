@@ -1,8 +1,14 @@
 import redis
 import json
+import configparser
 import azure.cognitiveservices.speech as speechsdk
 
-speech_key, service_region = "b7b619025538444082741e8befde119e", "westus"
+config = configparser.ConfigParser()
+config.read('speech.config')
+
+speech_key = config['DEFAULT']['SpeechKey']
+speaker_key = config['DEFAULT']['SpeakerKey']
+service_region = config['DEFAULT']['ServiceRegion']
 speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
 
 speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
@@ -10,7 +16,10 @@ speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
 r = redis.StrictRedis(host='redis', port=6379, db=0)
 
 r.delete('transcript')
+
+print("Starting speech recognition ...")
 while 1:
+    print("Say something (I'm giving up on you).")
     result = speech_recognizer.recognize_once()
     if result.reason == speechsdk.ResultReason.RecognizedSpeech:
         line = "Recognized: {}".format(result.text)
@@ -26,6 +35,5 @@ while 1:
         print("Speech Recognition canceled: {}".format(cancellation_details.reason))
         if cancellation_details.reason == speechsdk.CancellationReason.Error:
             print("Error details: {}".format(cancellation_details.error_details))
-        break
 
 print("Done!")
