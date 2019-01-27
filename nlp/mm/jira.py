@@ -95,7 +95,7 @@ def find_jira_item(rdb, idx, line, speaker):
     what = []
 
     for word in line:
-        if word.text.lower() in ["jira", "issue", "problem"]:  # Find the jira tag
+        if word.text.lower() in ["jira", "issue", "problem", "ticket"]:  # Find the jira tag
             possible_who = []
             possible_what = []
 

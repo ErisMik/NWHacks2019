@@ -272,6 +272,7 @@ class App extends React.Component {
 
           <Websocket
             url="ws://0.0.0.0:6677"
+            onOpen={console.log("test")}
             onMessage={this.websocketOnMessage}
           />
         </div>
