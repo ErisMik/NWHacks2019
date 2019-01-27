@@ -315,6 +315,6 @@ const container = {
   "align-items": "baseline",
   "align-content": "center"
 };
-const lineContainer = { flexGrow: 3 };
+const lineContainer = { flexGrow: 3, "font-style": "oblique" };
 const tagContainer = { flexGrow: 1, "align-self": "flex-start" };
 export default App;
