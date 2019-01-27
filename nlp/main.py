@@ -1,4 +1,5 @@
 import redis
+import json
 import spacy
 from spacy import displacy
 
@@ -24,6 +25,9 @@ def main(rdb):
             jira_item = find_jira_item(rdb, current_idx, line_doc, content['speaker'])
             if jira_item:
                 do_jira_action(jira_item)
+
+            tagged_line_dict = {'speaker': content['speaker'], 'line': content['line'], 'item': jira_item}
+            rdb.rpush('tagged_transcript', json.dumps(tagged_line_dict))
 
             current_idx += 1
 
