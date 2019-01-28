@@ -13,7 +13,7 @@ async def hello(websocket, path):
         if trans_content: transcript = [json.loads(line.decode("utf-8")) for line in trans_content]
 
         tag_content = r.get('tags')
-        tags = "[]"
+        tags = []
         if tag_content: tags = json.loads(tag_content.decode("utf-8"))
 
         payload = {
